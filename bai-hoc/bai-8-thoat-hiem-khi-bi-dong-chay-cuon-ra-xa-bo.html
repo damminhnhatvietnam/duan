@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="vi"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bài 8 – Kỹ năng thoát hiểm khi bị dòng chảy cuốn trôi ra xa bờ</title>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EAF6F8; --card:#FFFFFF; --ink:#0F2A3A; --muted:#4F6B7A;
+  --sea:#0A6C9C; --deep:#073B5A; --foam:#D5EFEF; --coral:#E8503A; --coral-bg:#FDE9E5;
+  --sun:#F5B82E; --ok:#14866D; --ok-bg:#DDF4EC; --line:#C9E2E8;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#071C28; --card:#0E2B3C; --ink:#E7F4F8; --muted:#9DBBC8;
+    --sea:#4FB6E6; --deep:#0A3A55; --foam:#12404F; --coral:#FF8A76; --coral-bg:#3F1F1B;
+    --sun:#F5B82E; --ok:#4FD1AE; --ok-bg:#12382F; --line:#1D4558; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#071C28; --card:#0E2B3C; --ink:#E7F4F8; --muted:#9DBBC8;
+  --sea:#4FB6E6; --deep:#0A3A55; --foam:#12404F; --coral:#FF8A76; --coral-bg:#3F1F1B;
+  --sun:#F5B82E; --ok:#4FD1AE; --ok-bg:#12382F; --line:#1D4558; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.6;font-size:16px}
+header{background:linear-gradient(160deg,var(--deep),var(--sea));color:#fff;padding:28px 24px 56px;position:relative;overflow:hidden}
+header .in{max-width:1280px;margin:auto;display:flex;align-items:center;gap:20px}
+header h1{margin:0;font-size:clamp(1.5rem,3.2vw,2.4rem);line-height:1.2;font-weight:800}
+header p{margin:6px 0 0;opacity:.9;max-width:60ch}
+header svg.wave{position:absolute;left:0;bottom:-1px;width:100%;height:36px}
+.drop{flex:none;width:76px;height:76px}
+main{max-width:1280px;margin:-24px auto 40px;padding:0 20px;display:flex;flex-direction:column;gap:22px}
+.row{display:grid;grid-template-columns:6fr 4fr;gap:20px;align-items:start}
+.row>.card{min-width:0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px 22px}
+.card h2{margin:0 0 10px;font-size:1.15rem;display:flex;align-items:center;gap:10px;color:var(--sea)}
+.card h2 .ic{width:34px;height:34px;border-radius:10px;background:var(--foam);display:grid;place-items:center;font-size:1.2rem}
+.card p{margin:0 0 8px}
+.small{color:var(--muted);font-size:.92rem}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:10px 0}
+.stat{background:var(--foam);border-radius:14px;padding:12px;text-align:center}
+.stat b{display:block;font-size:1.5rem;color:var(--sea);line-height:1.2}
+.stat span{font-size:.82rem;color:var(--muted)}
+.months{display:grid;grid-template-columns:96px repeat(12,1fr);gap:3px;align-items:center;font-size:.78rem;margin-top:8px}
+.months .h{text-align:center;color:var(--muted)}
+.months .r{font-weight:500}
+.months .c{height:18px;border-radius:4px;background:var(--foam)}
+.months .c.on{background:var(--sea)}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.tile{border-radius:14px;padding:12px;background:var(--foam)}
+.tile .e{font-size:1.7rem;line-height:1}
+.tile b{display:block;margin:6px 0 2px}
+.tile span{font-size:.88rem;color:var(--muted);display:block;line-height:1.45}
+.tile.bad{background:var(--coral-bg)}
+.tile.bad b{color:var(--coral)}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:7px}
+.list li{padding:8px 10px 8px 38px;border-radius:10px;position:relative;font-size:.95rem;line-height:1.45}
+.list li::before{position:absolute;left:10px;top:8px;font-weight:800}
+.list.yes li{background:var(--ok-bg)} .list.yes li::before{content:"✓";color:var(--ok)}
+.list.no li{background:var(--coral-bg)} .list.no li::before{content:"✕";color:var(--coral)}
+.col-t{font-weight:700;margin-bottom:8px}
+.col-t.y{color:var(--ok)} .col-t.n{color:var(--coral)}
+svg.fig{width:100%;height:auto;display:block;border-radius:14px}
+.tip{background:var(--sun);color:#3a2a00;border-radius:14px;padding:12px 14px;font-weight:500;font-size:.95rem;margin-top:10px}
+
+/* quiz */
+.topbar{position:sticky;top:0;z-index:20;background:var(--deep);color:#fff;border-radius:0 0 16px 16px;padding:calc(10px + env(safe-area-inset-top,0px)) 18px 10px;margin:0 20px;max-width:1240px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.topbar .bar{flex:1;min-width:120px;height:8px;border-radius:99px;background:rgba(255,255,255,.25);overflow:hidden}
+.topbar .bar i{display:block;height:100%;width:0;background:var(--sun);transition:width .3s}
+.topbar .sc{font-size:.88rem;font-weight:500}
+.topbar .msg{width:100%;font-size:.9rem;display:none}
+.topbar.fin .msg{display:block}
+.reset{font:inherit;font-weight:700;padding:6px 14px;border:0;border-radius:10px;background:var(--sun);color:#3a2a00;cursor:pointer}
+.reset:focus-visible,.q button:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+.qcard{position:sticky;top:76px;background:var(--card);border:2px solid var(--sea);border-radius:18px;padding:14px 16px;display:flex;flex-direction:column;gap:10px}
+.qcard h3{margin:0;font-size:1rem;color:var(--sea)}
+.q{border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+.q p{margin:0 0 10px;font-size:.95rem;font-weight:500}
+.q .btns{display:flex;gap:8px}
+.q button{flex:1;font:inherit;font-weight:700;padding:8px;border-radius:10px;border:2px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
+.q button:hover:not(:disabled){border-color:var(--sea)}
+.q button:disabled{cursor:default}
+.q button.right-a{background:var(--ok-bg);border-color:var(--ok);color:var(--ok)}
+.q button.wrong-a{background:var(--coral-bg);border-color:var(--coral);color:var(--coral)}
+.q .fb{margin-top:10px;font-size:.88rem;padding:8px 10px;border-radius:10px;display:none}
+.q.done .fb{display:block}
+.q.ok .fb{background:var(--ok-bg)} .q.ko .fb{background:var(--coral-bg)}
+@media (max-width:900px){
+  .row{grid-template-columns:1fr}
+  .qcard{position:static}
+  .topbar{margin:0 8px}
+  .cols,.stats{grid-template-columns:1fr}
+  .months{grid-template-columns:80px repeat(12,1fr)}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+.steps{list-style:none;counter-reset:s;padding:0;margin:0;display:flex;flex-direction:column;gap:7px}
+.steps li{counter-increment:s;background:var(--foam);border-radius:10px;padding:8px 10px 8px 42px;position:relative;font-size:.95rem;line-height:1.45}
+.steps li::before{content:counter(s);position:absolute;left:10px;top:8px;width:22px;height:22px;border-radius:50%;background:var(--deep);color:#fff;font-weight:700;display:grid;place-items:center;font-size:.8rem}
+.sticky{position:sticky;top:0;z-index:20;background:var(--deep);max-width:1240px;margin:0 auto;border-radius:0 0 16px 16px;padding-top:env(safe-area-inset-top,0px)}
+.sticky .topbar{position:static;margin:0;max-width:none;border-radius:0 0 16px 16px;padding:8px 18px 10px}
+.tabs{display:flex;gap:6px;overflow-x:auto;padding:10px 14px 4px;scrollbar-width:thin}
+.tabs button{flex:none;font:inherit;font-weight:700;font-size:.88rem;padding:6px 12px;border-radius:99px;border:2px solid rgba(255,255,255,.35);background:transparent;color:#fff;cursor:pointer}
+.tabs button[aria-current=true]{background:var(--sun);border-color:var(--sun);color:#3a2a00}
+.tabs button.ok::after{content:" ✓"}
+.tabs button:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+.qcard{top:calc(var(--st,120px) + 10px)}
+.foot{text-align:center;color:var(--muted);font-size:.85rem;padding:0 20px 28px}
+@media (max-width:900px){.sticky{border-radius:0 0 12px 12px}}
+.tabs{display:none}
+</style></head><body>
+<header><div class="in">
+<svg class="drop" viewBox="0 0 80 80" aria-hidden="true"><path d="M40 6C40 6 14 36 14 52a26 26 0 0 0 52 0C66 36 40 6 40 6z" fill="#fff" opacity=".95"/><path d="M28 54a12 12 0 0 0 10 12" stroke="#0A6C9C" stroke-width="4" fill="none" stroke-linecap="round"/></svg>
+<div><h1 id="ht"></h1><p>Đọc kiến thức bên trái, trả lời ngay câu Đúng – Sai bên phải cùng mục nhé!</p></div></div>
+<svg class="wave" viewBox="0 0 1200 36" preserveAspectRatio="none" aria-hidden="true"><path d="M0 18 Q150 0 300 18 T600 18 T900 18 T1200 18 V36 H0z" fill="var(--bg)"/></svg></header>
+<div class="sticky" id="sticky"><nav class="tabs" id="tabs" aria-label="Chọn bài"></nav>
+<div class="topbar" id="top"><div class="sc" id="sc"></div><div class="bar"><i id="bar"></i></div><button type="button" class="reset" id="rs">Làm lại bài này</button><div class="msg" id="msg" role="status" aria-live="polite"></div></div></div>
+<main id="main"></main>
+<div class="foot">Nguồn: Tài liệu hướng dẫn kỹ năng an toàn trong môi trường nước cho trẻ em – Cục Trẻ em, 2019.</div>
+<script>
+var D=[{"n": 8, "title": "Kỹ năng thoát hiểm khi bị dòng chảy cuốn trôi ra xa bờ", "secs": [{"ic": "🏖️", "title": "Dòng chảy xa bờ là gì?", "html": "<p>Sóng liên tục đẩy nước vào bờ, nước dồn lại thành <b>một dòng mạnh chảy ngược từ bờ ra biển<\/b>. Đó là dòng chảy xa bờ.<\/p><p>Nơi có dòng này thường <b>lặng sóng<\/b>, nên dễ bị hiểu nhầm là chỗ an toàn.<\/p>", "qs": [["Dòng chảy xa bờ là dòng nước mạnh chảy từ bờ ra biển.", true, "Đúng. Nó như một dòng sông nhỏ kéo mọi thứ ra xa bờ."]]}, {"ic": "⚠️", "title": "Vì sao rất nguy hiểm?", "html": "<div class=\"stats\"><div class=\"stat\"><b>80%<\/b><span>ca cứu nạn và đuối nước khi tắm biển có liên quan<\/span><\/div><div class=\"stat\"><b>0,5–1 m/s<\/b><span>vận tốc thường gặp<\/span><\/div><div class=\"stat\"><b>2,5 m/s<\/b><span>có thể nhanh hơn cả vận động viên bơi Olympic<\/span><\/div><\/div><ul class=\"list yes\"><li>Rộng khoảng 1–3 m, có khi cả chục mét.<\/li><li>Nguy hiểm cả khi sóng không lớn, vì lúc đó đông người xuống tắm và dễ chủ quan.<\/li><li>Người biết bơi cố bơi ngược sẽ <b>kiệt sức<\/b> rồi đuối nước.<\/li><\/ul>", "qs": [["Em bơi giỏi nên có thể bơi ngược dòng chảy xa bờ để vào bờ.", false, "Sai. Không ai bơi ngược nổi dòng này; sẽ kiệt sức."], ["Dòng chảy xa bờ chỉ nguy hiểm khi sóng thật lớn.", false, "Sai. Nó nguy hiểm bất cứ lúc nào, kể cả ngày sóng nhỏ."]]}, {"ic": "👀", "title": "Cách nhận biết", "html": "<ul class=\"list yes\"><li>Màu nước <b>sậm và đục<\/b> hơn xung quanh.<\/li><li>Mặt nước <b>phẳng lặng, ít sóng<\/b> hơn.<\/li><li>Có mảnh vỡ hoặc bọt nước trôi ra biển.<\/li><li>Đứng trên cao quan sát <b>5–10 phút<\/b> trước khi xuống tắm.<\/li><\/ul><div class=\"tip\">🌊 Nơi có sóng bạc đầu đưa em vào bờ; chỗ lặng sóng giữa hai vùng sóng mới là nguy hiểm.<\/div>", "qs": [["Chỗ có sóng bạc đầu sẽ đẩy em vào bờ, còn chỗ lặng sóng giữa hai vùng sóng mới nguy hiểm.", true, "Đúng. Hãy tắm ở nơi có biển báo an toàn."], ["Trước khi xuống biển, nên quan sát 5–10 phút từ trên cao.", true, "Đúng. Như vậy dễ nhận ra dòng chảy xa bờ."]]}, {"ic": "🆘", "title": "Khi bị cuốn ra xa bờ", "html": "<ul class=\"list yes\"><li>Không hoảng sợ, <b>không bơi ngược dòng<\/b>.<\/li><li>Thả trôi theo dòng để tiết kiệm sức, rồi <b>bơi lách ngang<\/b> qua trục dòng chảy về một phía, sau đó từ từ vào bờ.<\/li><li>Chưa thoát được: nổi ngửa hoặc bơi đứng, <b>kêu to, vẫy tay<\/b> xin cứu hộ.<\/li><li>Dòng chảy sẽ yếu dần ở vùng nước sâu xa bờ.<\/li><\/ul><p><b>Nếu em đang ở trên bờ:<\/b> đừng để mình thành nạn nhân tiếp theo, gọi đội cứu hộ hoặc người lớn, ném phao, hô cho nạn nhân bình tĩnh nổi ngửa.<\/p>", "qs": [["Bị cuốn ra xa bờ, em nên bơi lách ngang qua dòng chảy rồi mới vào bờ.", true, "Đúng. Bơi ngang ra khỏi dòng chảy rồi mới bơi vào bờ."], ["Thấy người bị cuốn ra biển, em nên lao xuống cứu ngay.", false, "Sai. Phải thận trọng để không thành nạn nhân tiếp theo; hãy gọi cứu hộ và ném phao."]]}]}];
+var ST={};
+function qs(n){var a=[];D[n-1].secs.forEach(function(s,i){s.qs.forEach(function(q){a.push([i,q]);});});return a;}
+function initMonths(){
+  var m=document.getElementById("months");if(!m)return;
+  var rows=[["Bắc Bộ",6,10],["Bắc Trung Bộ",7,11],["Trung, Nam Trung Bộ",9,12],["Tây Nguyên, Nam Bộ",6,11]],h='<div></div>';
+  for(var i=1;i<=12;i++)h+='<div class="h">T'+i+'</div>';
+  rows.forEach(function(r){h+='<div class="r">'+r[0]+'</div>';for(var i=1;i<=12;i++)h+='<div class="c'+(i>=r[1]&&i<=r[2]?' on':'')+'"></div>';});
+  m.innerHTML=h;
+}
+function stat(n){var st=ST[n]||{},d=0,g=0;Object.keys(st).forEach(function(k){d++;if(st[k].ok)g++;});return{d:d,g:g,t:qs(n).length};}
+function tabs(cur){
+  var t=document.getElementById("tabs");t.innerHTML="";
+  D.forEach(function(l){var b=document.createElement("button");b.type="button";b.textContent="Bài "+l.n;
+    var s=stat(l.n);if(s.d===s.t)b.className="ok";
+    if(l.n===cur)b.setAttribute("aria-current","true");
+    b.onclick=function(){location.hash="bai"+l.n;show(l.n);window.scrollTo(0,0);};t.appendChild(b);});
+  var a=t.querySelector("[aria-current]");if(a&&a.scrollIntoView)a.scrollIntoView({inline:"center",block:"nearest"});
+}
+function upd(n){
+  var s=stat(n);document.getElementById("bar").style.width=(s.d/s.t*100)+"%";
+  document.getElementById("sc").textContent="Đã trả lời "+s.d+"/"+s.t+" · Đúng "+s.g;
+  var top=document.getElementById("top");
+  if(s.d===s.t){document.getElementById("msg").textContent="Kết quả bài "+D[n-1].n+": "+s.g+"/"+s.t+" câu đúng. "+(s.g/s.t>=.85?"Xuất sắc! Em là chuyên gia an toàn nước!":s.g/s.t>=.65?"Giỏi lắm! Đọc lại vài ý nữa là hoàn hảo.":"Cố lên! Đọc lại phần kiến thức rồi làm lại nhé.");top.classList.add("fin");}
+  else top.classList.remove("fin");
+  tabs(n);
+}
+function show(n){
+  var L=D[n-1],main=document.getElementById("main");ST[n]=ST[n]||{};
+  document.getElementById("ht").textContent="Bài "+L.n+". "+L.title;
+  document.title="Bài "+L.n+" – "+L.title;
+  main.innerHTML="";
+  L.secs.forEach(function(s,si){
+    var row=document.createElement("div");row.className="row";
+    row.innerHTML='<section class="card"><h2><span class="ic">'+s.ic+'</span>'+s.title+'</h2>'+s.html+'</section>';
+    var c=document.createElement("aside");c.className="qcard";c.setAttribute("aria-label","Đúng – Sai");
+    c.innerHTML='<h3>📝 Đúng hay Sai?</h3>';
+    s.qs.forEach(function(q,qi){
+      var id=si+"-"+qi,d=document.createElement("div");d.className="q";
+      d.innerHTML='<p>'+q[0]+'</p><div class="btns"><button type="button">Đúng</button><button type="button">Sai</button></div><div class="fb"></div>';
+      var b=d.querySelectorAll("button");
+      function mark(k,ok){b[0].disabled=b[1].disabled=true;b[k].className=ok?"right-a":"wrong-a";if(!ok)b[q[1]?0:1].className="right-a";
+        d.classList.add("done",ok?"ok":"ko");d.querySelector(".fb").textContent=(ok?"🎉 Chính xác! ":"💡 Chưa đúng. ")+q[2];}
+      if(ST[n][id])mark(ST[n][id].k,ST[n][id].ok);
+      [true,false].forEach(function(v,k){b[k].onclick=function(){var ok=(v===q[1]);ST[n][id]={k:k,ok:ok};mark(k,ok);upd(n);};});
+      c.appendChild(d);
+    });
+    row.appendChild(c);main.appendChild(row);
+  });
+  initMonths();upd(n);
+  var h=document.getElementById("sticky").offsetHeight;document.documentElement.style.setProperty("--st",h+"px");
+}
+document.getElementById("rs").onclick=function(){var n=cur();ST[n]={};show(n);window.scrollTo({top:0,behavior:"smooth"});};
+function cur(){return 1;}
+window.addEventListener("hashchange",function(){show(cur());});
+window.addEventListener("resize",function(){document.documentElement.style.setProperty("--st",document.getElementById("sticky").offsetHeight+"px");});
+show(cur());
+</script></body></html>

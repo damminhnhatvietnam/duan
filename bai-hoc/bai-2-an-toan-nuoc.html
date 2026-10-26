@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bài 2 – An toàn trong môi trường nước</title>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EAF6F8; --card:#FFFFFF; --ink:#0F2A3A; --muted:#4F6B7A;
+  --sea:#0A6C9C; --deep:#073B5A; --foam:#D5EFEF; --coral:#E8503A; --coral-bg:#FDE9E5;
+  --sun:#F5B82E; --ok:#14866D; --ok-bg:#DDF4EC; --line:#C9E2E8;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#071C28; --card:#0E2B3C; --ink:#E7F4F8; --muted:#9DBBC8;
+    --sea:#4FB6E6; --deep:#0A3A55; --foam:#12404F; --coral:#FF8A76; --coral-bg:#3F1F1B;
+    --sun:#F5B82E; --ok:#4FD1AE; --ok-bg:#12382F; --line:#1D4558; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#071C28; --card:#0E2B3C; --ink:#E7F4F8; --muted:#9DBBC8;
+  --sea:#4FB6E6; --deep:#0A3A55; --foam:#12404F; --coral:#FF8A76; --coral-bg:#3F1F1B;
+  --sun:#F5B82E; --ok:#4FD1AE; --ok-bg:#12382F; --line:#1D4558; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.6;font-size:16px}
+header{background:linear-gradient(160deg,var(--deep),var(--sea));color:#fff;padding:28px 24px 56px;position:relative;overflow:hidden}
+header .in{max-width:1280px;margin:auto;display:flex;align-items:center;gap:20px}
+header h1{margin:0;font-size:clamp(1.5rem,3.2vw,2.4rem);line-height:1.2;font-weight:800}
+header p{margin:6px 0 0;opacity:.9;max-width:60ch}
+header svg.wave{position:absolute;left:0;bottom:-1px;width:100%;height:36px}
+.drop{flex:none;width:76px;height:76px}
+main{max-width:1280px;margin:-24px auto 40px;padding:0 20px;display:flex;flex-direction:column;gap:22px}
+.row{display:grid;grid-template-columns:6fr 4fr;gap:20px;align-items:start}
+.row>.card{min-width:0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px 22px}
+.card h2{margin:0 0 10px;font-size:1.15rem;display:flex;align-items:center;gap:10px;color:var(--sea)}
+.card h2 .ic{width:34px;height:34px;border-radius:10px;background:var(--foam);display:grid;place-items:center;font-size:1.2rem}
+.card p{margin:0 0 8px}
+.small{color:var(--muted);font-size:.92rem}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:10px 0}
+.stat{background:var(--foam);border-radius:14px;padding:12px;text-align:center}
+.stat b{display:block;font-size:1.5rem;color:var(--sea);line-height:1.2}
+.stat span{font-size:.82rem;color:var(--muted)}
+.months{display:grid;grid-template-columns:96px repeat(12,1fr);gap:3px;align-items:center;font-size:.78rem;margin-top:8px}
+.months .h{text-align:center;color:var(--muted)}
+.months .r{font-weight:500}
+.months .c{height:18px;border-radius:4px;background:var(--foam)}
+.months .c.on{background:var(--sea)}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.tile{border-radius:14px;padding:12px;background:var(--foam)}
+.tile .e{font-size:1.7rem;line-height:1}
+.tile b{display:block;margin:6px 0 2px}
+.tile span{font-size:.88rem;color:var(--muted);display:block;line-height:1.45}
+.tile.bad{background:var(--coral-bg)}
+.tile.bad b{color:var(--coral)}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:7px}
+.list li{padding:8px 10px 8px 38px;border-radius:10px;position:relative;font-size:.95rem;line-height:1.45}
+.list li::before{position:absolute;left:10px;top:8px;font-weight:800}
+.list.yes li{background:var(--ok-bg)} .list.yes li::before{content:"✓";color:var(--ok)}
+.list.no li{background:var(--coral-bg)} .list.no li::before{content:"✕";color:var(--coral)}
+.col-t{font-weight:700;margin-bottom:8px}
+.col-t.y{color:var(--ok)} .col-t.n{color:var(--coral)}
+svg.fig{width:100%;height:auto;display:block;border-radius:14px}
+.tip{background:var(--sun);color:#3a2a00;border-radius:14px;padding:12px 14px;font-weight:500;font-size:.95rem;margin-top:10px}
+
+/* quiz */
+.topbar{position:sticky;top:0;z-index:20;background:var(--deep);color:#fff;border-radius:0 0 16px 16px;padding:calc(10px + env(safe-area-inset-top,0px)) 18px 10px;margin:0 20px;max-width:1240px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.topbar .bar{flex:1;min-width:120px;height:8px;border-radius:99px;background:rgba(255,255,255,.25);overflow:hidden}
+.topbar .bar i{display:block;height:100%;width:0;background:var(--sun);transition:width .3s}
+.topbar .sc{font-size:.88rem;font-weight:500}
+.topbar .msg{width:100%;font-size:.9rem;display:none}
+.topbar.fin .msg{display:block}
+.reset{font:inherit;font-weight:700;padding:6px 14px;border:0;border-radius:10px;background:var(--sun);color:#3a2a00;cursor:pointer}
+.reset:focus-visible,.q button:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+.qcard{position:sticky;top:76px;background:var(--card);border:2px solid var(--sea);border-radius:18px;padding:14px 16px;display:flex;flex-direction:column;gap:10px}
+.qcard h3{margin:0;font-size:1rem;color:var(--sea)}
+.q{border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+.q p{margin:0 0 10px;font-size:.95rem;font-weight:500}
+.q .btns{display:flex;gap:8px}
+.q button{flex:1;font:inherit;font-weight:700;padding:8px;border-radius:10px;border:2px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
+.q button:hover:not(:disabled){border-color:var(--sea)}
+.q button:disabled{cursor:default}
+.q button.right-a{background:var(--ok-bg);border-color:var(--ok);color:var(--ok)}
+.q button.wrong-a{background:var(--coral-bg);border-color:var(--coral);color:var(--coral)}
+.q .fb{margin-top:10px;font-size:.88rem;padding:8px 10px;border-radius:10px;display:none}
+.q.done .fb{display:block}
+.q.ok .fb{background:var(--ok-bg)} .q.ko .fb{background:var(--coral-bg)}
+@media (max-width:900px){
+  .row{grid-template-columns:1fr}
+  .qcard{position:static}
+  .topbar{margin:0 8px}
+  .cols,.stats{grid-template-columns:1fr}
+  .months{grid-template-columns:80px repeat(12,1fr)}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header>
+  <div class="in">
+    <svg class="drop" viewBox="0 0 80 80" aria-hidden="true"><path d="M40 6C40 6 14 36 14 52a26 26 0 0 0 52 0C66 36 40 6 40 6z" fill="#fff" opacity=".95"/><path d="M28 54a12 12 0 0 0 10 12" stroke="#0A6C9C" stroke-width="4" fill="none" stroke-linecap="round"/></svg>
+    <div>
+      <h1>Bài 2. Kiến thức cơ bản về môi trường nước và nguyên tắc an toàn</h1>
+      <p>Đọc kiến thức bên trái, trả lời ngay câu Đúng – Sai bên phải cùng mục nhé!</p>
+    </div>
+  </div>
+  <svg class="wave" viewBox="0 0 1200 36" preserveAspectRatio="none" aria-hidden="true"><path d="M0 18 Q150 0 300 18 T600 18 T900 18 T1200 18 V36 H0z" fill="var(--bg)"/></svg>
+</header>
+
+<div class="topbar" id="top"><div class="sc" id="sc">Đã trả lời 0/15 · Đúng 0</div><div class="bar"><i id="bar"></i></div><button type="button" class="reset" id="rs">Làm lại</button><div class="msg" id="msg" role="status" aria-live="polite"></div></div>
+<main>
+<div class="row">
+<section class="card">
+    <h2><span class="ic">💧</span>Nước quan trọng thế nào?</h2>
+    <p>Mọi sự sống trên Trái Đất đều cần nước và vòng tuần hoàn nước.</p>
+    <p>Nước là hợp chất của ô-xy và hi-đrô, công thức <b>H₂O</b>. Nước tinh khiết <b>không màu, không mùi, không vị</b>.</p>
+    <svg class="fig" viewBox="0 0 360 90" role="img" aria-label="Phân tử nước H2O">
+      <rect width="360" height="90" fill="var(--foam)"/>
+      <line x1="180" y1="40" x2="130" y2="62" stroke="var(--muted)" stroke-width="5"/><line x1="180" y1="40" x2="230" y2="62" stroke="var(--muted)" stroke-width="5"/>
+      <circle cx="180" cy="40" r="26" fill="#E8503A"/><text x="180" y="47" text-anchor="middle" font-size="20" font-weight="800" fill="#fff">O</text>
+      <circle cx="124" cy="66" r="16" fill="#0A6C9C"/><text x="124" y="72" text-anchor="middle" font-size="15" font-weight="800" fill="#fff">H</text>
+      <circle cx="236" cy="66" r="16" fill="#0A6C9C"/><text x="236" y="72" text-anchor="middle" font-size="15" font-weight="800" fill="#fff">H</text>
+      <text x="20" y="30" font-size="13" fill="var(--ink)">1 ô-xy + 2 hi-đrô</text>
+    </svg>
+  </section>
+<aside class="qcard" data-sec="0" aria-label="Đúng – Sai"><h3>📝 Thử thách về nước: Đúng hay Sai?</h3></aside>
+</div>
+<div class="row">
+<section class="card">
+    <h2><span class="ic">🇻🇳</span>Môi trường nước ở Việt Nam</h2>
+    <div class="stats">
+      <div class="stat"><b>3.260 km</b><span>bờ biển</span></div>
+      <div class="stat"><b>3.000+</b><span>hòn đảo lớn nhỏ</span></div>
+      <div class="stat"><b>2.360</b><span>sông dài trên 10 km (93% là sông nhỏ, ngắn)</span></div>
+    </div>
+    <p>Sông ngòi có hai mùa: <b>mùa lũ</b> và <b>mùa cạn</b>. Mùa lũ nước dâng cao và chảy mạnh. Mùa lũ từng vùng:</p>
+    <div class="months" id="months" aria-label="Mùa lũ theo vùng"></div>
+  </section>
+<aside class="qcard" data-sec="1" aria-label="Đúng – Sai"><h3>📝 Thử thách về nước Việt Nam: Đúng hay Sai?</h3></aside>
+</div>
+<div class="row">
+<section class="card">
+    <h2><span class="ic">🏞️</span>Nhận biết các môi trường nước</h2>
+    <div class="grid2">
+      <div class="tile"><div class="e">🌊</div><b>Sông</b><span>Dòng nước lớn chảy thường xuyên, bắt nguồn từ hồ, suối hoặc sông nhỏ ở nơi cao hơn.</span></div>
+      <div class="tile"><div class="e">🏞️</div><b>Hồ</b><span>Vùng nước được đất liền bao quanh, phần lớn là nước ngọt.</span></div>
+      <div class="tile"><div class="e">🏖️</div><b>Biển</b><span>Vùng nước mặn nối với các đại dương của Trái Đất.</span></div>
+      <div class="tile"><div class="e">🏊</div><b>Bể bơi</b><span>Công trình chứa nước tĩnh để bơi lội, có bể trong nhà và ngoài trời.</span></div>
+      <div class="tile"><div class="e">🌧️</div><b>Lũ</b><span>Mực nước và tốc độ dòng chảy trên sông, suối vượt mức bình thường.</span></div>
+      <div class="tile"><div class="e">🏘️</div><b>Lụt</b><span>Nước lũ tràn qua bờ vào vùng trũng, làm ngập nhà cửa, cây cối, ruộng đồng.</span></div>
+    </div>
+  </section>
+<aside class="qcard" data-sec="2" aria-label="Đúng – Sai"><h3>📝 Thử thách nhận biết: Đúng hay Sai?</h3></aside>
+</div>
+<div class="row">
+<section class="card">
+    <h2><span class="ic">⚠️</span>Những vùng nước nguy hiểm</h2>
+    <div class="grid2">
+      <div class="tile bad"><div class="e">🦠</div><b>Ao tù bẩn</b><span>Không thấy đáy, dễ mắc bệnh da, mắt.</span></div>
+      <div class="tile bad"><div class="e">🕳️</div><b>Nước sâu</b><span>Có biển cảnh báo thì tuyệt đối tránh xa.</span></div>
+      <div class="tile bad"><div class="e">🌀</div><b>Nước xoáy</b><span>Hai dòng ngược chiều gặp nhau và cuốn vòng.</span></div>
+      <div class="tile bad"><div class="e">🟤</div><b>Nước lũ</b><span>Đục, chảy xiết, cuốn theo đất đá, cây cối.</span></div>
+      <div class="tile bad"><div class="e">🚩</div><b>Biển sóng mạnh</b><span>Cờ đỏ, biển “cấm bơi” là lệnh dừng lại.</span></div>
+    </div>
+  </section>
+<aside class="qcard" data-sec="3" aria-label="Đúng – Sai"><h3>📝 Thử thách vùng nguy hiểm: Đúng hay Sai?</h3></aside>
+</div>
+<div class="row">
+<section class="card">
+    <h2><span class="ic">🛡️</span>Nguyên tắc an toàn</h2>
+    <ul class="list yes">
+      <li>Chỉ xuống nước khi biết bơi (tự bơi được ít nhất <b>25 m</b>).</li>
+      <li>Học bơi ở nơi có người quản lý hoặc người lớn hướng dẫn.</li>
+      <li>Luôn có người giám sát; chấp hành quy định khi đi tàu, thuyền, mùa mưa lũ.</li>
+      <li>Thấy mệt thì ra khỏi nước càng sớm càng tốt.</li>
+    </ul>
+    <div class="cols" style="margin-top:12px">
+      <div><div class="col-t y">Nên làm khi bơi</div>
+        <ul class="list yes"><li>Chọn chỗ nước nông, bơi cùng người biết bơi</li><li>Mặc áo phao hoặc mang phao bơi</li><li>Kiểm tra độ sâu, khởi động kỹ</li><li>Bơi nơi được phép, có cứu hộ trên bờ</li></ul></div>
+      <div><div class="col-t n">Không được làm</div>
+        <ul class="list no"><li>Bơi một mình nơi vắng vẻ</li><li>Bơi ngay sau khi ăn, hoặc vừa ăn vừa bơi</li><li>Bơi khi quá nóng, mệt hoặc nước dơ, bùn lầy</li><li>Nhảy, lặn ở nơi nước cạn hoặc không thấy đáy</li></ul></div>
+    </div>
+    <div class="tip">⛈️ Trời tối, có sấm chớp và mưa: lên bờ ngay!</div>
+  </section>
+<aside class="qcard" data-sec="4" aria-label="Đúng – Sai"><h3>📝 Thử thách nguyên tắc an toàn: Đúng hay Sai?</h3></aside>
+</div>
+<div class="row">
+<section class="card">
+    <h2><span class="ic">🆘</span>Gặp nguy hiểm dưới nước</h2>
+    <ul class="list yes">
+      <li><b>Giữ bình tĩnh</b>, nổi ngửa, vẫy tay hình nắm đấm và <b>kêu cứu</b>.</li>
+      <li>Gặp nước xoáy: không chống lại dòng xoáy; bơi <b>song song với bờ</b> để thoát ra, rồi mới bơi vào bờ.</li>
+      <li>Chưa thoát được: nổi ngửa hoặc bơi đứng tại chỗ để giữ sức, giơ tay gọi cứu.</li>
+      <li>Ở biển, chỉ bơi giữa <b>hai cờ đỏ – vàng</b> có nhân viên cứu hộ.</li>
+    </ul>
+    <svg class="fig" viewBox="0 0 360 120" style="margin-top:12px" role="img" aria-label="Bơi song song với bờ để thoát dòng chảy xa bờ">
+      <rect width="360" height="120" fill="#7CCBE0"/><rect y="84" width="360" height="36" fill="#F1DDA8"/>
+      <rect x="150" y="30" width="60" height="54" fill="#3C97B8" opacity=".7"/>
+      <text x="180" y="62" text-anchor="middle" font-size="11" fill="#fff">dòng chảy xa bờ</text>
+      <path d="M180 30 L180 12" stroke="#E8503A" stroke-width="3"/><text x="188" y="14" font-size="10" fill="#073B5A">ra biển</text>
+      <circle cx="180" cy="36" r="7" fill="#073B5A"/>
+      <path d="M172 36 H90" stroke="#14866D" stroke-width="4" stroke-dasharray="6 4"/><path d="M90 36 l8 -5 v10z" fill="#14866D"/>
+      <path d="M188 36 H270" stroke="#14866D" stroke-width="4" stroke-dasharray="6 4"/><path d="M270 36 l-8 -5 v10z" fill="#14866D"/>
+      <text x="90" y="104" font-size="11" fill="#5a4a1c">bờ cát – bơi ngang rồi mới vào bờ</text>
+    </svg>
+    <p class="small" style="margin-top:8px">Vùng lặng sóng giữa hai vùng sóng bạc đầu có thể là dòng chảy xa bờ: nhìn yên ả nhưng nguy hiểm!</p>
+  </section>
+<aside class="qcard" data-sec="5" aria-label="Đúng – Sai"><h3>📝 Thử thách tình huống: Đúng hay Sai?</h3></aside>
+</div>
+</main>
+
+<script>
+(function(){
+  var rows=[["Bắc Bộ",6,10],["Bắc Trung Bộ",7,11],["Trung, Nam Trung Bộ",9,12],["Tây Nguyên, Nam Bộ",6,11]];
+  var m=document.getElementById("months"),h='<div></div>';
+  for(var i=1;i<=12;i++)h+='<div class="h">T'+i+'</div>';
+  rows.forEach(function(r){h+='<div class="r">'+r[0]+'</div>';for(var i=1;i<=12;i++)h+='<div class="c'+(i>=r[1]&&i<=r[2]?' on':'')+'"></div>';});
+  m.innerHTML=h;
+
+  var Q=[
+   [0,"Nước tinh khiết không màu, không mùi, không vị.",true,"Đúng rồi! Nước tinh khiết là H₂O, không màu, không mùi, không vị."],
+   [1,"Phần lớn sông ngòi ở Việt Nam là sông lớn và dài.",false,"Sai. Có 2.360 con sông dài trên 10 km, trong đó 93% là sông nhỏ và ngắn."],
+   [1,"Mùa lũ ở Bắc Bộ kéo dài từ tháng 6 đến tháng 10.",true,"Đúng. Nhìn bảng mùa lũ ở bên trái để so với các vùng khác."],
+   [2,"Lụt là khi nước lũ dâng cao, tràn qua bờ sông, suối vào vùng trũng làm ngập nhà cửa, ruộng đồng.",true,"Đúng. Còn lũ là khi mực nước và tốc độ dòng chảy trên sông, suối vượt mức bình thường."],
+   [2,"Biển là vùng nước ngọt được đất liền bao quanh.",false,"Sai. Biển là vùng nước mặn nối với các đại dương; vùng nước được đất liền bao quanh là hồ."],
+   [3,"Ao tù bẩn nhìn mát nên có thể xuống bơi.",false,"Sai. Nước dơ bẩn, bùn lầy không thấy đáy và dễ gây bệnh da, mắt."],
+   [3,"Thấy biển cảnh báo khu vực nước sâu nguy hiểm thì phải tránh xa.",true,"Đúng. Biển cảnh báo giúp em biết nơi có nguy cơ đuối nước."],
+   [4,"Em chưa tự bơi được 25 m thì không nên xuống nước.",true,"Đúng. Chỉ xuống nước khi biết bơi và có người lớn giám sát."],
+   [4,"Có thể bơi ngay sau khi vừa ăn no.",false,"Sai. Bơi ngay sau khi ăn rất hại dạ dày, vừa ăn vừa bơi còn dễ bị sặc nước."],
+   [4,"Trời tối, có sấm chớp và mưa thì phải lên bờ ngay.",true,"Đúng. Hãy rời khỏi nước và tìm nơi trú an toàn."],
+   [4,"Nhảy hoặc lặn ở chỗ nước đục, không nhìn thấy đáy cũng không sao.",false,"Sai. Không nhảy, lặn ở nơi nước cạn hoặc không thấy đáy vì rất nguy hiểm."],
+   [5,"Khi gặp nguy hiểm dưới nước: giữ bình tĩnh, nổi ngửa, vẫy tay và kêu cứu.",true,"Đúng. Giữ sức và gọi người giúp là việc quan trọng nhất."],
+   [5,"Gặp nước xoáy, em nên bơi thẳng vào tâm xoáy vì đó là đường ngắn nhất.",false,"Sai. Hãy bơi vòng theo xoáy để ra xa tâm, hoặc bơi song song với bờ để thoát."],
+   [5,"Chỗ biển lặng sóng luôn là nơi an toàn nhất để tắm.",false,"Sai. Vùng lặng sóng có thể là dòng chảy xa bờ, kéo người ra biển rất nhanh."],
+   [5,"Ở biển, em chỉ nên bơi trong khu vực giữa hai cờ đỏ – vàng có nhân viên cứu hộ.",true,"Đúng. Đó là khu vực được giám sát và cho phép bơi."]
+  ];
+  var done,good,N=Q.length;
+  function upd(){
+    document.getElementById("bar").style.width=(done/N*100)+"%";
+    document.getElementById("sc").textContent="Đã trả lời "+done+"/"+N+" · Đúng "+good;
+  }
+  function build(){
+    done=0;good=0;upd();
+    var top=document.getElementById("top");top.classList.remove("fin");
+    document.querySelectorAll(".qcard").forEach(function(c){
+      Array.prototype.slice.call(c.querySelectorAll(".q")).forEach(function(x){x.remove();});
+      var sec=+c.getAttribute("data-sec");
+      Q.forEach(function(q,i){
+        if(q[0]!==sec)return;
+        var d=document.createElement("div");d.className="q";
+        d.innerHTML='<p>'+q[1]+'</p><div class="btns"><button type="button">Đúng</button><button type="button">Sai</button></div><div class="fb"></div>';
+        var b=d.querySelectorAll("button");
+        [true,false].forEach(function(v,k){
+          b[k].addEventListener("click",function(){
+            var ok=(v===q[2]);
+            b[0].disabled=b[1].disabled=true;
+            b[k].className=ok?"right-a":"wrong-a";
+            if(!ok)b[q[2]?0:1].className="right-a";
+            d.classList.add("done",ok?"ok":"ko");
+            d.querySelector(".fb").textContent=(ok?"🎉 Chính xác! ":"💡 Chưa đúng. ")+q[3];
+            done++;if(ok)good++;upd();
+            if(done===N){
+              document.getElementById("msg").textContent="Kết quả: "+good+"/"+N+" câu đúng. "+(good>=13?"Xuất sắc! Em là chuyên gia an toàn nước!":good>=10?"Giỏi lắm! Đọc lại vài ý nữa là hoàn hảo.":"Cố lên! Đọc lại phần kiến thức rồi làm lại nhé.");
+              top.classList.add("fin");
+            }
+          });
+        });
+        c.appendChild(d);
+      });
+    });
+  }
+  document.getElementById("rs").addEventListener("click",function(){build();window.scrollTo({top:0,behavior:"smooth"});});
+  build();
+})();
+</script>
+</body>
+</html>
